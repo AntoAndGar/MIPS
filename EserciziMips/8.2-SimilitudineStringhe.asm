@@ -63,12 +63,27 @@ SIMILITUDINE:
 	# a2, a3 length of strings
 	move $t0, $a0
 	move $t1, $a1
+	move $t2, $a2
+	move $t3, $a3
+	bgt $t2, $t3, do_nothing
+	move $t2, $t3
 	
-	li $t2, 0
-loop:
-	ble $t
-	addi $t2, $t2, 1
-	j loop
+do_nothing:
+	li $t4, 0
+simil_loop:
+	ble $t2, $t4, simil_end
+	lb $t5, 0($t0)
+	lb $t6, 0($t1)
+	seq $t7, $t5, $t6
+	add $t8, $t8, $t7
+	addi $t4, $t4, 1
+	addi $t0, $t0, 1
+	addi $t1, $t1, 1
+	j simil_loop
+	
+simil_end:
+	move $v0, $t8
+	jr $ra
 	
 .data
 str1: .space 255
